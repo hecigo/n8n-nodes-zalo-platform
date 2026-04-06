@@ -1,0 +1,61 @@
+{
+	"name": "n8n-nodes-zalo-platform",
+	"version": "1.0.7",
+	"description": "n8n community node for Zalo Bot Platform - send messages, photos, stickers and manage webhooks",
+	"keywords": [
+		"n8n-community-node-package",
+		"n8n",
+		"zalo",
+		"zalo-bot",
+		"messaging",
+		"vietnam",
+		"chatbot"
+	],
+	"license": "MIT",
+	"homepage": "https://thenexova.com/n8n-zalo-bot-node-complete-setup-and-operations-guide/",
+	"author": {
+		"name": "THE NEXOVA",
+		"email": "corbin@thenexova.com",
+		"url": "https://thenexova.com"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/thenexova/n8n-nodes-zalo-platform.git"
+	},
+	"main": "index.js",
+	"scripts": {
+		"prebuild": "rimraf dist",
+		"build": "tsc && gulp build:icons",
+		"dev": "tsc --watch",
+		"format": "prettier nodes credentials --write",
+		"lint": "eslint nodes credentials package.json",
+		"lintfix": "eslint nodes credentials package.json --fix",
+		"prepublishOnly": "npm run build"
+	},
+	"files": [
+		"dist"
+	],
+	"n8n": {
+		"n8nNodesApiVersion": 1,
+		"credentials": [
+			"dist/credentials/ZaloBotApi.credentials.js"
+		],
+		"nodes": [
+			"dist/nodes/ZaloBot/ZaloBot.node.js",
+			"dist/nodes/ZaloBot/ZaloBotTrigger.node.js"
+		]
+	},
+	"devDependencies": {
+		"@types/node": "^25.5.0",
+		"@typescript-eslint/parser": "^7.0.0",
+		"eslint": "^8.56.0",
+		"gulp": "^4.0.2",
+		"n8n-workflow": "^1.0.0",
+		"prettier": "^3.2.0",
+		"rimraf": "^5.0.0",
+		"typescript": "^5.3.0"
+	},
+	"peerDependencies": {
+		"n8n-workflow": "*"
+	}
+}

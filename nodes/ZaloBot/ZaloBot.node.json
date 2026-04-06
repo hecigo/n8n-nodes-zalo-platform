@@ -1,0 +1,16 @@
+{
+	"node": "n8n-nodes-zalo.zaloBot",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"categories": ["Communication"],
+	"subcategories": {
+		"Communication": ["Instant Messaging"]
+	},
+	"resources": {
+		"primaryDocumentation": [
+			{
+				"url": "https://bot.zaloplatforms.com/docs"
+			}
+		]
+	}
+}
