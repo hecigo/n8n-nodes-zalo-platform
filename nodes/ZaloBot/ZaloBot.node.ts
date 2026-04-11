@@ -19,7 +19,7 @@ export class ZaloBot implements INodeType {
 		group: ['output'],
 		version: 1,
 		subtitle: '={{$parameter["operation"]}}',
-		description: 'Send messages, photos, stickers and manage webhooks. Compatible with official Zalo Bot Platform.',
+		description: 'Send messages, photos, stickers, chat actions and manage webhooks. Compatible with official Zalo Bot Platform.',
 		defaults: {
 			name: 'Zalo Bot',
 		},
@@ -64,6 +64,12 @@ export class ZaloBot implements INodeType {
 						action: 'Send a photo',
 					},
 					{
+						name: 'Send Chat Action',
+						value: 'sendChatAction',
+						description: 'Display a typing or upload indicator in a conversation',
+						action: 'Send a chat action',
+					},
+					{
 						name: 'Send Sticker',
 						value: 'sendSticker',
 						description: 'Send a sticker to a user or group',
@@ -102,7 +108,7 @@ export class ZaloBot implements INodeType {
 				description: 'User ID or Group ID to send the message to',
 				displayOptions: {
 					show: {
-						operation: ['sendMessage', 'sendPhoto', 'sendSticker'],
+						operation: ['sendMessage', 'sendPhoto', 'sendSticker', 'sendChatAction'],
 					},
 				},
 			},
@@ -163,6 +169,33 @@ export class ZaloBot implements INodeType {
 				displayOptions: {
 					show: {
 						operation: ['sendSticker'],
+					},
+				},
+			},
+
+			// ------ Send Chat Action ------
+			{
+				displayName: 'Action',
+				name: 'action',
+				type: 'options',
+				required: true,
+				options: [
+					{
+						name: 'Typing',
+						value: 'typing',
+						description: 'Bot is typing a message',
+					},
+					{
+						name: 'Upload Photo',
+						value: 'upload_photo',
+						description: 'Bot is uploading a photo',
+					},
+				],
+				default: 'typing',
+				description: 'Type of action to display to the user',
+				displayOptions: {
+					show: {
+						operation: ['sendChatAction'],
 					},
 				},
 			},
@@ -246,6 +279,13 @@ export class ZaloBot implements INodeType {
 					const body: Record<string, unknown> = { chat_id: chatId, photo };
 					if (caption) body.caption = caption;
 					responseData = await apiRequest.call(this, baseUrl, 'POST', '/sendPhoto', body);
+				} else if (operation === 'sendChatAction') {
+					const chatId = this.getNodeParameter('chatId', i) as string;
+					const action = this.getNodeParameter('action', i) as string;
+					responseData = await apiRequest.call(this, baseUrl, 'POST', '/sendChatAction', {
+						chat_id: chatId,
+						action,
+					});
 				} else if (operation === 'sendSticker') {
 					const chatId = this.getNodeParameter('chatId', i) as string;
 					const stickerId = this.getNodeParameter('stickerId', i) as string;
