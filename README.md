@@ -1,6 +1,6 @@
 # n8n-nodes-zalo-platform
 
-Community node for [Zalo Bot Platform](https://bot.zaloplatforms.com) on n8n. Automate Zalo Bot interactions: receive messages via webhook, send replies, photos, and stickers.
+Community node for [Zalo Bot Platform](https://bot.zaloplatforms.com) on n8n. Automate Zalo Bot interactions: receive messages via webhook, send replies, photos, stickers, and chat actions.
 
 Built by [THE NEXOVA](https://thenexova.com). Full guide: [n8n Zalo Bot Node: Complete Setup and Operations Guide](https://thenexova.com/n8n-zalo-bot-node-complete-setup-and-operations-guide/)
 
@@ -52,7 +52,7 @@ When a workflow is activated, the node:
 
 ### Zalo Bot (Action)
 
-8 operations, all using `POST` requests to `https://bot-api.zaloplatforms.com/bot{TOKEN}/{method}`.
+9 operations, all using `POST` requests to `https://bot-api.zaloplatforms.com/bot{TOKEN}/{method}`.
 
 #### Send Message
 
@@ -70,6 +70,17 @@ Request body: `{ "chat_id": "...", "text": "..." }`
 | `chatId` | String | Yes | User ID or Group ID |
 | `photo` | String | Yes | HTTPS image URL |
 | `caption` | String | No | Caption, max 2000 characters |
+
+#### Send Chat Action
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `chatId` | String | Yes | User ID or Group ID |
+| `action` | Options | Yes | `typing` (bot is typing) or `upload_photo` (bot is uploading a photo) |
+
+Request body: `{ "chat_id": "...", "action": "typing" }`
+
+> Useful before sending a message or photo to show the bot is "thinking".
 
 #### Send Sticker
 
