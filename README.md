@@ -2,7 +2,9 @@
 
 Community node for [Zalo Bot Platform](https://bot.zaloplatforms.com) on n8n. Automate Zalo Bot interactions: receive messages via webhook, send replies, photos, stickers, and chat actions.
 
-Built by [THE NEXOVA](https://thenexova.com). Full guide: [n8n Zalo Bot Node: Complete Setup and Operations Guide](https://thenexova.com/n8n-zalo-bot-node-complete-setup-and-operations-guide/)
+Built by [hecigo](https://hecigo.com) — Middleware Lab for Global Expansion.
+
+**Guides:** [Setup Guide (EN)](https://thenexova.com/n8n-zalo-bot-node-complete-setup-and-operations-guide/) | [Hướng dẫn chi tiết (VI)](https://hecigo.com/blog/toi-uu-tu-dong-hoa-zalo-bot-voi-n8n-huong-dan-chi-tiet-tu-hecigo)
 
 ## Nodes
 
@@ -198,7 +200,9 @@ Schedule Trigger (every 30s)
 
 ## About
 
-[THE NEXOVA](https://thenexova.com) builds automation infrastructure for businesses. Need custom n8n nodes or workflow consulting? [Get in touch](https://thenexova.com/contact/).
+[hecigo](https://hecigo.com) is a middleware lab researching and deploying integration solutions that connect Vietnamese businesses to global systems. Need custom n8n nodes or middleware consulting? [Get in touch](https://hecigo.com/#contact).
+
+Consulting partner: [THE NEXOVA](https://thenexova.com) — Bridge Strategy to Execution.
 
 ## License
 

@@ -9,7 +9,7 @@ import {
 } from 'n8n-workflow';
 import { createHash } from 'crypto';
 
-const HELP_NOTICE = 'Need help? Visit https://thenexova.com/n8n-zalo-bot-node-complete-setup-and-operations-guide/ or contact THE NEXOVA team at contact@thenexova.com';
+const HELP_NOTICE = 'Need help? Visit https://hecigo.com or contact hecigo team at contact@hecigo.com';
 
 /**
  * Derive a deterministic secret token from bot token.

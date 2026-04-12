@@ -12,15 +12,15 @@
 		"chatbot"
 	],
 	"license": "MIT",
-	"homepage": "https://thenexova.com/n8n-zalo-bot-node-complete-setup-and-operations-guide/",
+	"homepage": "https://hecigo.com/blog/toi-uu-tu-dong-hoa-zalo-bot-voi-n8n-huong-dan-chi-tiet-tu-hecigo",
 	"author": {
-		"name": "THE NEXOVA",
-		"email": "corbin@thenexova.com",
-		"url": "https://thenexova.com"
+		"name": "hecigo",
+		"email": "contact@hecigo.com",
+		"url": "https://hecigo.com"
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/thenexova/n8n-nodes-zalo-platform.git"
+		"url": "https://github.com/hecigo/n8n-nodes-zalo-platform.git"
 	},
 	"main": "index.js",
 	"scripts": {
