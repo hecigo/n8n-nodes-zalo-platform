@@ -4,7 +4,9 @@ import {
 	INodeExecutionData,
 	INodeType,
 	INodeTypeDescription,
+	NodeApiError,
 	NodeOperationError,
+	JsonObject,
 	IHttpRequestMethods,
 	IHttpRequestOptions,
 } from 'n8n-workflow';
@@ -322,7 +324,10 @@ export class ZaloBot implements INodeType {
 					returnData.push(...executionErrorData);
 					continue;
 				}
-				throw error;
+				if (error instanceof NodeOperationError || error instanceof NodeApiError) {
+					throw error;
+				}
+				throw new NodeApiError(this.getNode(), error as JsonObject);
 			}
 		}
 

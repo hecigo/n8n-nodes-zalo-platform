@@ -4,7 +4,7 @@ Community node for [Zalo Bot Platform](https://bot.zaloplatforms.com) on n8n. Au
 
 Built by [hecigo](https://hecigo.com) — Middleware Lab for Global Expansion.
 
-**Guides:** [Setup Guide (EN)](https://thenexova.com/n8n-zalo-bot-node-complete-setup-and-operations-guide/) | [Hướng dẫn chi tiết (VI)](https://hecigo.com/blog/toi-uu-tu-dong-hoa-zalo-bot-voi-n8n-huong-dan-chi-tiet-tu-hecigo)
+**Guides:** [Setup Guide (EN)](https://thenexova.com/n8n-zalo-bot-node-complete-setup-and-operations-guide/) | [Detailed Guide (Vietnamese)](https://hecigo.com/blog/toi-uu-tu-dong-hoa-zalo-bot-voi-n8n-huong-dan-chi-tiet-tu-hecigo)
 
 ## Nodes
 
@@ -136,7 +136,7 @@ Restart n8n after installation.
 
 1. Open **Zalo** on your phone
 2. Search for OA **"Zalo Bot Manager"**
-3. Tap **"Tao bot"** (Create bot)
+3. Tap **"Create Bot"**
 4. Enter a bot name (must start with "Bot", e.g., `Bot MyShop`)
 5. Zalo sends your **Bot Token** via message: `{bot_id}:{secret_key}`
 

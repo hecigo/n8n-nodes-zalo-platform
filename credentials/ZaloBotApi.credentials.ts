@@ -18,7 +18,7 @@ export class ZaloBotApi implements ICredentialType {
 			typeOptions: { password: true },
 			default: '',
 			placeholder: '12345689:abc-xyz',
-			description: 'Bot token received via Zalo message after creating your bot in Zalo Bot Creator. Open Zalo, search for "OA Zalo Bot Manager", select "Tao bot" to create your bot. Format: {bot_id}:{secret_key}',
+			description: 'Bot token received via Zalo message after creating your bot in Zalo Bot Creator. Open Zalo, search for "OA Zalo Bot Manager", select "Create Bot" to create your bot. Format: {bot_id}:{secret_key}',
 		},
 	];
 
