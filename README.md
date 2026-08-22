@@ -2,7 +2,7 @@
 
 Community node for [Zalo Bot Platform](https://bot.zaloplatforms.com) on n8n. Automate Zalo Bot interactions: receive messages via webhook, send replies, photos, stickers, and chat actions.
 
-Built by [hecigo](https://hecigo.com) — Middleware Lab for Global Expansion.
+Built by [hecigo](https://hecigo.com) — Middleware & Integration Lab.
 
 **Guides:** [Setup Guide (EN)](https://thenexova.com/n8n-zalo-bot-node-complete-setup-and-operations-guide/) | [Detailed Guide (Vietnamese)](https://hecigo.com/blog/toi-uu-tu-dong-hoa-zalo-bot-voi-n8n-huong-dan-chi-tiet-tu-hecigo)
 

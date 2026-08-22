@@ -11,7 +11,7 @@ import {
 	IHttpRequestOptions,
 } from 'n8n-workflow';
 
-const HELP_NOTICE = 'Need help? Visit https://hecigo.com or contact hecigo team at contact@hecigo.com';
+const HELP_NOTICE = 'Need help? Visit https://hecigo.com or contact hecigo team at hi@hecigo.com';
 
 export class ZaloBot implements INodeType {
 	description: INodeTypeDescription = {
