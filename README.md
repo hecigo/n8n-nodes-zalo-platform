@@ -4,7 +4,7 @@ Community node for [Zalo Bot Platform](https://bot.zaloplatforms.com) on n8n. Au
 
 Built by [hecigo](https://hecigo.com) — Middleware & Integration Lab.
 
-**Guides:** [Setup Guide (EN)](https://thenexova.com/n8n-zalo-bot-node-complete-setup-and-operations-guide/) | [Detailed Guide (Vietnamese)](https://hecigo.com/blog/toi-uu-tu-dong-hoa-zalo-bot-voi-n8n-huong-dan-chi-tiet-tu-hecigo)
+**Guide:** [Hướng dẫn chi tiết (Vietnamese)](https://hecigo.com/blog/toi-uu-tu-dong-hoa-zalo-bot-voi-n8n-huong-dan-chi-tiet-tu-hecigo)
 
 ## Nodes
 
@@ -200,7 +200,7 @@ Schedule Trigger (every 30s)
 
 ## About
 
-[hecigo](https://hecigo.com) is a middleware lab researching and deploying integration solutions that connect Vietnamese businesses to global systems. Need custom n8n nodes or middleware consulting? [Get in touch](https://hecigo.com/#contact).
+[hecigo](https://hecigo.com) is a middleware and integration lab. We build and run the layer that makes disconnected business systems talk to each other — with the right data, and nothing lost. Need custom n8n nodes or middleware consulting? [Get in touch](https://hecigo.com/#contact).
 
 Consulting partner: [THE NEXOVA](https://thenexova.com) — Bridge Strategy to Execution.
 
