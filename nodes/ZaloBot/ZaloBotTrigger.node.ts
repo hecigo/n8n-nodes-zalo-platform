@@ -9,7 +9,7 @@ import {
 } from 'n8n-workflow';
 import { createHash } from 'crypto';
 
-const HELP_NOTICE = 'Need help? Visit https://hecigo.com or contact hecigo team at contact@hecigo.com';
+const HELP_NOTICE = 'Need help? Visit https://hecigo.com or contact hecigo team at hi@hecigo.com';
 
 /**
  * Derive a deterministic secret token from bot token.
