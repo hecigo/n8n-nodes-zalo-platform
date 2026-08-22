@@ -4,7 +4,7 @@ Community node for [Zalo Bot Platform](https://bot.zaloplatforms.com) on n8n. Au
 
 Built by [hecigo](https://hecigo.com) — Middleware & Integration Lab.
 
-**Guide:** [Hướng dẫn chi tiết (Vietnamese)](https://hecigo.com/blog/toi-uu-tu-dong-hoa-zalo-bot-voi-n8n-huong-dan-chi-tiet-tu-hecigo)
+**Guides:** [Running a Zalo bot on n8n: what breaks in production](https://hecigo.com/blog/n8n-zalo-bot-node-what-breaks-in-production/) (English) · [Hướng dẫn chi tiết](https://hecigo.com/blog/toi-uu-tu-dong-hoa-zalo-bot-voi-n8n-huong-dan-chi-tiet-tu-hecigo) (Tiếng Việt)
 
 ## Nodes
 
