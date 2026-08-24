@@ -4,7 +4,7 @@ Community node for [Zalo Bot Platform](https://bot.zaloplatforms.com) on n8n. Au
 
 Built by [hecigo](https://hecigo.com) — Middleware & Integration Lab.
 
-**Guides:** [Running a Zalo bot on n8n: what breaks in production](https://hecigo.com/blog/n8n-zalo-bot-node-what-breaks-in-production/) (English) · [Hướng dẫn chi tiết](https://hecigo.com/blog/toi-uu-tu-dong-hoa-zalo-bot-voi-n8n-huong-dan-chi-tiet-tu-hecigo) (Tiếng Việt)
+**Guides:** [Running a Zalo bot on n8n: what breaks in production](https://hecigo.com/blog/n8n-zalo-bot-node-what-breaks-in-production/) (English) · [Detailed Guide](https://hecigo.com/blog/toi-uu-tu-dong-hoa-zalo-bot-voi-n8n-huong-dan-chi-tiet-tu-hecigo) (Vietnamese)
 
 ## Nodes
 
@@ -195,7 +195,9 @@ Schedule Trigger (every 30s)
 
 ## Compatibility
 
-- n8n: >= 1.0.0
+- n8n: **>= 1.83**. The nodes import `NodeConnectionTypes` from `n8n-workflow`, which
+  first shipped in `n8n-workflow@1.83.0`. On older n8n the node package fails to load.
+  Stay on `1.0.13` if you cannot upgrade n8n.
 - Zalo Bot Platform API
 
 ## About

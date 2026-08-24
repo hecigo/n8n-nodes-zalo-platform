@@ -1,5 +1,6 @@
 import {
 	IAuthenticateGeneric,
+	Icon,
 	ICredentialTestRequest,
 	ICredentialType,
 	INodeProperties,
@@ -9,6 +10,10 @@ export class ZaloBotApi implements ICredentialType {
 	name = 'zaloBotApi';
 	displayName = 'Zalo Bot API';
 	documentationUrl = 'https://bot.zaloplatforms.com/docs';
+	icon: Icon = {
+		light: 'file:../nodes/ZaloBot/zalobot.svg',
+		dark: 'file:../nodes/ZaloBot/zalobot.dark.svg',
+	};
 
 	properties: INodeProperties[] = [
 		{
