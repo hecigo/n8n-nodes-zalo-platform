@@ -5,6 +5,7 @@ import {
 	INodeType,
 	INodeTypeDescription,
 	NodeApiError,
+	NodeConnectionTypes,
 	NodeOperationError,
 	JsonObject,
 	IHttpRequestMethods,
@@ -17,16 +18,17 @@ export class ZaloBot implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'Zalo Bot',
 		name: 'zaloBot',
-		icon: 'file:zalobot.svg',
+		icon: { light: 'file:zalobot.svg', dark: 'file:zalobot.dark.svg' },
 		group: ['output'],
 		version: 1,
+		usableAsTool: true,
 		subtitle: '={{$parameter["operation"]}}',
 		description: 'Send messages, photos, stickers, chat actions and manage webhooks. Compatible with official Zalo Bot Platform.',
 		defaults: {
 			name: 'Zalo Bot',
 		},
-		inputs: ['main'],
-		outputs: ['main'],
+		inputs: [NodeConnectionTypes.Main],
+		outputs: [NodeConnectionTypes.Main],
 		credentials: [
 			{
 				name: 'zaloBotApi',
@@ -42,6 +44,12 @@ export class ZaloBot implements INodeType {
 				noDataExpression: true,
 				options: [
 					{
+						name: 'Delete Webhook',
+						value: 'deleteWebhook',
+						description: 'Remove the current webhook configuration',
+						action: 'Delete webhook',
+					},
+					{
 						name: 'Get Bot Info',
 						value: 'getMe',
 						description: 'Get information about the bot',
@@ -52,6 +60,18 @@ export class ZaloBot implements INodeType {
 						value: 'getUpdates',
 						description: 'Fetch incoming messages via long polling',
 						action: 'Get updates',
+					},
+					{
+						name: 'Get Webhook Info',
+						value: 'getWebhookInfo',
+						description: 'Get information about the current webhook',
+						action: 'Get webhook info',
+					},
+					{
+						name: 'Send Chat Action',
+						value: 'sendChatAction',
+						description: 'Display a typing or upload indicator in a conversation',
+						action: 'Send a chat action',
 					},
 					{
 						name: 'Send Message',
@@ -66,12 +86,6 @@ export class ZaloBot implements INodeType {
 						action: 'Send a photo',
 					},
 					{
-						name: 'Send Chat Action',
-						value: 'sendChatAction',
-						description: 'Display a typing or upload indicator in a conversation',
-						action: 'Send a chat action',
-					},
-					{
 						name: 'Send Sticker',
 						value: 'sendSticker',
 						description: 'Send a sticker to a user or group',
@@ -82,18 +96,6 @@ export class ZaloBot implements INodeType {
 						value: 'setWebhook',
 						description: 'Configure a webhook URL to receive updates',
 						action: 'Set webhook',
-					},
-					{
-						name: 'Delete Webhook',
-						value: 'deleteWebhook',
-						description: 'Remove the current webhook configuration',
-						action: 'Delete webhook',
-					},
-					{
-						name: 'Get Webhook Info',
-						value: 'getWebhookInfo',
-						description: 'Get information about the current webhook',
-						action: 'Get webhook info',
 					},
 				],
 				default: 'sendMessage',
@@ -186,11 +188,13 @@ export class ZaloBot implements INodeType {
 						name: 'Typing',
 						value: 'typing',
 						description: 'Bot is typing a message',
+						action: 'Bot is typing a message',
 					},
 					{
 						name: 'Upload Photo',
 						value: 'upload_photo',
 						description: 'Bot is uploading a photo',
+						action: 'Bot is uploading a photo',
 					},
 				],
 				default: 'typing',
@@ -316,18 +320,26 @@ export class ZaloBot implements INodeType {
 				);
 				returnData.push(...executionData);
 			} catch (error) {
+				// Errors we raised ourselves already carry node context; anything else
+				// (network, timeout, malformed response) gets wrapped so the HTTP
+				// details survive into the n8n UI instead of surfacing as a raw throw.
+				const nodeError =
+					error instanceof NodeApiError || error instanceof NodeOperationError
+						? error
+						: new NodeApiError(this.getNode(), error as JsonObject, {
+								itemIndex: i,
+								description: HELP_NOTICE,
+							});
+
 				if (this.continueOnFail()) {
 					const executionErrorData = this.helpers.constructExecutionMetaData(
-						this.helpers.returnJsonArray({ error: (error as Error).message }),
+						this.helpers.returnJsonArray({ error: nodeError.message }),
 						{ itemData: { item: i } },
 					);
 					returnData.push(...executionErrorData);
 					continue;
 				}
-				if (error instanceof NodeOperationError || error instanceof NodeApiError) {
-					throw error;
-				}
-				throw new NodeApiError(this.getNode(), error as JsonObject);
+				throw nodeError;
 			}
 		}
 
@@ -357,11 +369,10 @@ async function apiRequest(
 	if (response && typeof response === 'object' && 'ok' in response && !response.ok) {
 		const res = response as { description?: string; error?: string; error_code?: number };
 		const msg = res.description ?? res.error ?? 'Unknown error';
-		throw new NodeOperationError(
-			this.getNode(),
-			`Zalo Bot API error: ${msg}`,
-			{ description: HELP_NOTICE },
-		);
+		throw new NodeApiError(this.getNode(), response as JsonObject, {
+			message: `Zalo Bot API error: ${msg}`,
+			description: HELP_NOTICE,
+		});
 	}
 
 	return response;

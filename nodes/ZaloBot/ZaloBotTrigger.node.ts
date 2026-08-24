@@ -5,6 +5,9 @@ import {
 	INodeTypeDescription,
 	IWebhookFunctions,
 	IWebhookResponseData,
+	JsonObject,
+	NodeApiError,
+	NodeConnectionTypes,
 	NodeOperationError,
 } from 'n8n-workflow';
 import { createHash } from 'crypto';
@@ -41,7 +44,7 @@ export class ZaloBotTrigger implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'Zalo Bot Trigger',
 		name: 'zaloBotTrigger',
-		icon: 'file:zalobot.svg',
+		icon: { light: 'file:zalobot.svg', dark: 'file:zalobot.dark.svg' },
 		group: ['trigger'],
 		version: 1,
 		subtitle: '={{$parameter["event"]}}',
@@ -50,7 +53,7 @@ export class ZaloBotTrigger implements INodeType {
 			name: 'Zalo Bot Trigger',
 		},
 		inputs: [],
-		outputs: ['main'],
+		outputs: [NodeConnectionTypes.Main],
 		credentials: [
 			{
 				name: 'zaloBotApi',
@@ -114,15 +117,20 @@ export class ZaloBotTrigger implements INodeType {
 				const baseUrl = `https://bot-api.zaloplatforms.com/bot${botToken}`;
 				const webhookUrl = this.getNodeWebhookUrl('default')!;
 
+				let data: IDataObject;
 				try {
-					const data = await callZaloApi(baseUrl, 'getWebhookInfo');
-					if (data.ok && (data.result as IDataObject)?.url === webhookUrl) {
-						return true;
-					}
-				} catch {
-					// Not set
+					data = await callZaloApi(baseUrl, 'getWebhookInfo');
+				} catch (error) {
+					// A throw here means the API was unreachable, not that the webhook
+					// is unset - getWebhookInfo answers "not set" with { ok: false }.
+					// Reporting false would hide the outage behind a create() attempt.
+					throw new NodeApiError(this.getNode(), error as JsonObject, {
+						message: 'Could not reach the Zalo Bot API to check the webhook registration',
+						description: HELP_NOTICE,
+					});
 				}
-				return false;
+
+				return Boolean(data.ok) && (data.result as IDataObject)?.url === webhookUrl;
 			},
 
 			async create(this: IHookFunctions): Promise<boolean> {
@@ -151,8 +159,12 @@ export class ZaloBotTrigger implements INodeType {
 
 				try {
 					await callZaloApi(baseUrl, 'deleteWebhook');
-				} catch {
-					// Ignore cleanup errors
+				} catch (error) {
+					// Deactivation must not fail on a cleanup error, but it must not be
+					// silent either: a stale webhook on Zalo's side keeps delivering.
+					this.logger.warn(
+						`Zalo Bot Trigger: failed to remove the webhook on deactivation - it may still be registered with Zalo. ${(error as Error).message}`,
+					);
 				}
 				return true;
 			},

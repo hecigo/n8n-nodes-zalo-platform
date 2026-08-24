@@ -1,5 +1,5 @@
 {
-	"node": "n8n-nodes-zalo.zaloBot",
+	"node": "n8n-nodes-zalo-platform.zaloBot",
 	"nodeVersion": "1.0",
 	"codexVersion": "1.0",
 	"categories": ["Communication"],

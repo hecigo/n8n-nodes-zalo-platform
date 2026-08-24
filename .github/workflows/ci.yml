@@ -23,6 +23,7 @@ jobs:
       - name: Build
         run: npm run build
 
+      # Same rule set as n8n's verification scanner
+      # (npx @n8n/scan-community-package n8n-nodes-zalo-platform).
       - name: Lint
         run: npm run lint
-        continue-on-error: true
