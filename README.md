@@ -4,6 +4,8 @@
 
 Community node for [Zalo Bot Platform](https://bot.zaloplatforms.com) on n8n. Automate Zalo Bot interactions: receive messages via webhook, send replies, photos, stickers, and chat actions.
 
+**Verified by n8n**, so it installs from the nodes panel on **n8n Cloud** as well as self-hosted. [Unverified community nodes cannot run on n8n Cloud](https://docs.n8n.io/integrations/community-nodes/installation-and-management/).
+
 Built by [hecigo](https://hecigo.com) — Middleware & Integration Lab.
 
 **Guides:** [Running a Zalo bot on n8n: what breaks in production](https://hecigo.com/blog/n8n-zalo-bot-node-what-breaks-in-production/) (English) · [Detailed Guide](https://hecigo.com/blog/toi-uu-tu-dong-hoa-zalo-bot-voi-n8n-huong-dan-chi-tiet-tu-hecigo) (Vietnamese)
@@ -116,7 +118,12 @@ Request body: `{ "chat_id": "...", "action": "typing" }`
 
 ## Installation
 
-### n8n Community Nodes
+### n8n Cloud
+
+Search for **Zalo Bot** in the nodes panel on the canvas. Verified nodes are
+installed on first use, with no Settings step and no risk prompt.
+
+### Self-hosted n8n
 
 1. Go to **Settings** > **Community Nodes**
 2. Select **Install**
@@ -206,7 +213,7 @@ Schedule Trigger (every 30s)
 
 [hecigo](https://hecigo.com) is a middleware and integration lab. We build and run the layer that makes disconnected business systems talk to each other — with the right data, and nothing lost. Need custom n8n nodes or middleware consulting? [Get in touch](https://hecigo.com/#contact).
 
-**Other n8n nodes by hecigo:** [n8n-nodes-firecrawl-v2](https://github.com/hecigo/n8n-nodes-firecrawl-v2) — scrape, crawl, map, search and AI extraction with Firecrawl v2, cloud or self-hosted.
+**Other n8n nodes by hecigo:** [n8n-nodes-firecrawl-v2](https://github.com/hecigo/n8n-nodes-firecrawl-v2) — scrape, crawl, map, search and AI extraction against Firecrawl v2. Self-hosted n8n only.
 
 Consulting partner: [THE NEXOVA](https://thenexova.com) — Bridge Strategy to Execution.
 
