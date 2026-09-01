@@ -1,5 +1,7 @@
 # n8n-nodes-zalo-platform
 
+[![npm version](https://img.shields.io/npm/v/n8n-nodes-zalo-platform)](https://www.npmjs.com/package/n8n-nodes-zalo-platform) [![npm downloads](https://img.shields.io/npm/dm/n8n-nodes-zalo-platform)](https://www.npmjs.com/package/n8n-nodes-zalo-platform) [![license](https://img.shields.io/npm/l/n8n-nodes-zalo-platform)](LICENSE)
+
 Community node for [Zalo Bot Platform](https://bot.zaloplatforms.com) on n8n. Automate Zalo Bot interactions: receive messages via webhook, send replies, photos, stickers, and chat actions.
 
 Built by [hecigo](https://hecigo.com) — Middleware & Integration Lab.
@@ -203,6 +205,8 @@ Schedule Trigger (every 30s)
 ## About
 
 [hecigo](https://hecigo.com) is a middleware and integration lab. We build and run the layer that makes disconnected business systems talk to each other — with the right data, and nothing lost. Need custom n8n nodes or middleware consulting? [Get in touch](https://hecigo.com/#contact).
+
+**Other n8n nodes by hecigo:** [n8n-nodes-firecrawl-v2](https://github.com/hecigo/n8n-nodes-firecrawl-v2) — scrape, crawl, map, search and AI extraction with Firecrawl v2, cloud or self-hosted.
 
 Consulting partner: [THE NEXOVA](https://thenexova.com) — Bridge Strategy to Execution.
 
