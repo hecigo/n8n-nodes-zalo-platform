@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.0.1
+
+Documentation only. The node code is unchanged from 2.0.0.
+
+Links in this README that point at hecigo.com now carry attribution parameters, so we can see
+which of our own links people actually follow. This collects nothing about you personally: what
+gets recorded is the link code, the page it led to, and the country Cloudflare works out at its
+own edge. No IP address, no user agent, no referring page, and the record is deleted after three
+months. Full detail at https://hecigo.com/privacy/
+
 ## 2.0.0
 
 **Requires n8n >= 1.83.** The nodes now use `NodeConnectionTypes.Main` instead of the
