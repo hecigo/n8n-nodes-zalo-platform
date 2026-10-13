@@ -31,6 +31,9 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Test
+        run: node --test "test/*.test.js"
+
       # No NODE_AUTH_TOKEN: OIDC handles auth, and provenance is generated
       # automatically when publishing from a trusted publisher.
       - name: Publish to npm

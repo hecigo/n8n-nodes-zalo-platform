@@ -1,0 +1,32 @@
+{
+	"name": "Zalo Bot - reply in group",
+	"nodes": [
+		{
+			"parameters": {
+				"event": "message.text.received",
+				"chatType": "all"
+			},
+			"name": "Zalo Bot Trigger",
+			"type": "n8n-nodes-zalo-platform.zaloBotTrigger",
+			"typeVersion": 1,
+			"position": [0, 0]
+		},
+		{
+			"parameters": {
+				"operation": "sendMessage",
+				"chatId": "={{ $json.message.chat.id }}",
+				"text": "=Đã nhận ({{ $json.message.chat.chat_type }}): {{ $json.message.text }}"
+			},
+			"name": "Reply in same chat",
+			"type": "n8n-nodes-zalo-platform.zaloBot",
+			"typeVersion": 1,
+			"position": [260, 0]
+		}
+	],
+	"connections": {
+		"Zalo Bot Trigger": {
+			"main": [[{ "node": "Reply in same chat", "type": "main", "index": 0 }]]
+		}
+	},
+	"settings": {}
+}

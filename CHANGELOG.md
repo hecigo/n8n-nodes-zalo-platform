@@ -1,5 +1,27 @@
 # Changelog
 
+## 2.1.0
+
+Group chats. Existing workflows behave exactly as before.
+
+- **Zalo Bot Trigger** has a new **Chat Type** filter: All (default), Private or Group.
+  It reads `message.chat.chat_type`. Workflows saved before this version have no value
+  for it and keep receiving every message.
+- The trigger shows a notice, and the **Chat ID** field on Zalo Bot now explains it too:
+  to reply in the same conversation use `message.chat.id`. `message.from.id` is the
+  sender, so replying to it from a group sends the answer to their private inbox. This
+  was the cause of a "bot only answers me privately" report.
+- README: a section on using the bot in a group (added by the group owner through the
+  invite link from Zalo Bot Creator; triggered by an @mention or a reply to the bot;
+  still in Zalo's internal testing), a group payload sample, and Troubleshooting rows.
+- New guide, in Vietnamese: [docs/huong-dan-chat.md](docs/huong-dan-chat.md). It covers
+  private and group chats, `chat.id` versus `from.id`, adding the bot through the invite
+  link, choosing between the Chat Type filter and a Switch, AI Agent memory keys, known
+  limits and troubleshooting.
+- Test suite (`npm test`, Node's built-in runner, no new dependencies) covering webhook
+  verification, the event and chat type filters (against real private and group payloads), the webhook lifecycle, request mapping
+  for every operation, and error handling. CI runs it on every push.
+
 ## 2.0.1
 
 Documentation only. The node code is unchanged from 2.0.0.

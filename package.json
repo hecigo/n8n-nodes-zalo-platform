@@ -1,6 +1,6 @@
 {
 	"name": "n8n-nodes-zalo-platform",
-	"version": "2.0.1",
+	"version": "2.1.0",
 	"description": "n8n community node for Zalo Bot Platform - send messages, photos, stickers and manage webhooks",
 	"keywords": [
 		"n8n-community-node-package",
@@ -30,6 +30,8 @@
 		"format": "prettier nodes credentials --write",
 		"lint": "eslint package.json nodes credentials",
 		"lintfix": "eslint package.json nodes credentials --fix",
+		"pretest": "npm run build",
+		"test": "node --test \"test/*.test.js\"",
 		"prepublishOnly": "npm run build"
 	},
 	"files": [

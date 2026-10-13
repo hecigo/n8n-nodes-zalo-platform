@@ -8,7 +8,7 @@ Community node for [Zalo Bot Platform](https://bot.zaloplatforms.com) on n8n. Au
 
 Built by [hecigo](https://hecigo.com/go/hm-np-readme?i=zalo) — Middleware & Integration Lab.
 
-**Guides:** [Running a Zalo bot on n8n: what breaks in production](https://hecigo.com/blog/n8n-zalo-bot-node-what-breaks-in-production/?utm_source=npm&utm_medium=referral&utm_content=readme-zalo) (English) · [Detailed Guide](https://hecigo.com/blog/toi-uu-tu-dong-hoa-zalo-bot-voi-n8n-huong-dan-chi-tiet-tu-hecigo?utm_source=npm&utm_medium=referral&utm_content=readme-zalo) (Vietnamese)
+**Guides:** [Running a Zalo bot on n8n: what breaks in production](https://hecigo.com/blog/n8n-zalo-bot-node-what-breaks-in-production/?utm_source=npm&utm_medium=referral&utm_content=readme-zalo) (English) · [Detailed Guide](https://hecigo.com/blog/toi-uu-tu-dong-hoa-zalo-bot-voi-n8n-huong-dan-chi-tiet-tu-hecigo?utm_source=npm&utm_medium=referral&utm_content=readme-zalo) (Vietnamese) · [Chat riêng và trong nhóm](https://github.com/hecigo/n8n-nodes-zalo-platform/blob/main/docs/huong-dan-chat.md) (Vietnamese)
 
 ## Nodes
 
@@ -32,16 +32,28 @@ When a workflow is activated, the node:
 | Image Message | `message.image.received` | Images only |
 | Sticker Message | `message.sticker.received` | Stickers only |
 
+**Chat type filtering:**
+
+| Option | Value | Passes Through |
+|--------|-------|----------------|
+| All | `all` | Private and group messages (default) |
+| Private | `PRIVATE` | One-to-one messages only |
+| Group | `GROUP` | Group messages only |
+
+Zalo posts `{ "ok": true, "result": { ... }, "error_code": 0 }`. The trigger unwraps
+`result`, so its output starts at `event_name` and every expression below begins with
+`$json.message`, not `$json.result.message`.
+
 **Sample output:**
 
 ```json
 {
   "event_name": "message.text.received",
   "message": {
-    "date": 1775362520302,
-    "chat": { "chat_type": "PRIVATE", "id": "818e7bf147beaee0f7af" },
-    "message_id": "261de7b845d153890ac6",
-    "from": { "id": "818e7bf147beaee0f7af", "is_bot": false, "display_name": "Nguyen Van A" },
+    "date": 1791900030000,
+    "chat": { "chat_type": "PRIVATE", "id": "5c1e9a7d3b2f48a6e0d4" },
+    "message_id": "d92b04f6e1a7c3580b4e",
+    "from": { "id": "5c1e9a7d3b2f48a6e0d4", "is_bot": false, "display_name": "Nguyen Van A" },
     "text": "Xin chao"
   }
 }
@@ -52,9 +64,54 @@ When a workflow is activated, the node:
 | Expression | Returns |
 |------------|---------|
 | `{{ $json.message.chat.id }}` | Chat ID (use to reply) |
+| `{{ $json.message.chat.chat_type }}` | `PRIVATE` or `GROUP` |
+| `{{ $json.message.from.id }}` | Sender's user ID (not for replying in a group) |
 | `{{ $json.message.text }}` | Message content |
 | `{{ $json.message.from.display_name }}` | Sender name |
 | `{{ $json.event_name }}` | Event type |
+
+#### Using the bot in a group
+
+Full walkthrough, including AI Agent memory per chat and per sender (Vietnamese):
+[Chat với Zalo Bot trên n8n: tin nhắn riêng và trong nhóm](https://github.com/hecigo/n8n-nodes-zalo-platform/blob/main/docs/huong-dan-chat.md).
+
+Zalo lists group chats as **in internal testing** ("trong giai đoạn thử nghiệm nội bộ"),
+so the invite option may not be available for every bot or account yet. Official guide:
+[Zalo Bot interaction with group chats](https://bot.zapps.me/docs/build-bot-interaction-with-group/).
+
+1. **Add the bot through its invite link, not through "Add member".** Open the
+   **Zalo Bot Creator** mini app, pick the bot, and in **"Mời Bot vào nhóm"** share or
+   copy the link into the group. A **group admin** (Zalo's guide says the group owner,
+   trưởng nhóm) taps the link and confirms **"Thêm Bot vào Nhóm"**. A regular member
+   cannot add the bot. The bot then posts a joined message in the group.
+2. **@mention the bot, or reply to one of its messages.** Zalo sends a group message to
+   the webhook only in those two cases, so ordinary chatter in the group never reaches n8n.
+3. Check the execution: a group message has `"chat_type": "GROUP"` and a `chat.id`
+   that belongs to the group.
+3. Set **Chat ID** in the Zalo Bot node to `{{ $json.message.chat.id }}`.
+
+`chat.id` is the conversation and `from.id` is the person who sent the message. In a
+private chat the two are equal, which is why they look the same in your first tests.
+In a group they differ: replying to `from.id` sends the answer to that person's private
+inbox instead of the group.
+
+Group sample (real payload, same sender as the private sample above):
+
+```json
+{
+  "event_name": "message.text.received",
+  "message": {
+    "date": 1791900000000,
+    "chat": { "chat_type": "GROUP", "id": "zgr-7e3d9b1a5c2f80e4d6a1" },
+    "message_id": "a41c7e9d03b6f25e8d17",
+    "from": { "id": "5c1e9a7d3b2f48a6e0d4", "is_bot": false, "display_name": "Nguyen Van A" },
+    "text": "@Bot MyShop xin chao"
+  }
+}
+```
+
+Group IDs seen so far start with `zgr-`, while user IDs are plain hex. If the Chat ID you
+send to does not start with `zgr-`, the reply is going to a private inbox.
 
 ### Zalo Bot (Action)
 
@@ -197,10 +254,25 @@ Schedule Trigger (every 30s)
 | Problem | Cause | Fix |
 |---------|-------|-----|
 | Trigger receives nothing | Cloudflare blocks Java UA | Create both Cloudflare rules |
+| Bot replies in private inbox, not the group | Chat ID mapped to `message.from.id` | Use `{{ $json.message.chat.id }}` |
+| Cannot add the bot to a group | Group feature still in Zalo's internal testing, or not added by a group admin via the invite link | Use the link from Zalo Bot Creator → "Mời Bot vào nhóm", tapped by a group admin. If the option is missing, the feature is not open to that bot yet |
+| Group messages never trigger | Bot not @mentioned or replied to | Tag the bot, or reply to one of its messages |
 | 401 on credential test | Token expired/wrong | Create new bot |
 | Test mode spins forever | Workflow still active | Deactivate before testing |
 | getUpdates empty | Webhook still registered | Call Delete Webhook first |
 | Worker missing node | Only on main instance | Install on all containers |
+
+## Development
+
+```bash
+npm install
+npm test        # builds, then runs the tests in test/ against dist/
+npm run lint    # same rule set as n8n's verification scanner
+```
+
+Tests use Node's built-in runner (`node:test`), no extra dependencies. They run against
+the compiled nodes in `dist/`, the code that ships. Webhook payload fixtures live in
+`test/fixtures/`; `group-text.json` is synthetic until a real group payload replaces it.
 
 ## Compatibility
 

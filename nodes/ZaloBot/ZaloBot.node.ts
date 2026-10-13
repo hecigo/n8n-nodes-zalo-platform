@@ -109,7 +109,8 @@ export class ZaloBot implements INodeType {
 				required: true,
 				default: '',
 				placeholder: '1234567890',
-				description: 'User ID or Group ID to send the message to',
+				description:
+					'User ID or Group ID to send to. To reply from the trigger, map <b>message → chat → ID</b>, not <b>message → from → ID</b>: the sender ID always points to their private inbox, even for a group message.',
 				displayOptions: {
 					show: {
 						operation: ['sendMessage', 'sendPhoto', 'sendSticker', 'sendChatAction'],

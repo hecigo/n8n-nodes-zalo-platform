@@ -98,6 +98,37 @@ export class ZaloBotTrigger implements INodeType {
 				],
 				default: 'anyMessage',
 			},
+			{
+				displayName: 'Chat Type',
+				name: 'chatType',
+				type: 'options',
+				noDataExpression: true,
+				options: [
+					{
+						name: 'All',
+						value: 'all',
+						description: 'Trigger on private and group messages',
+					},
+					{
+						name: 'Private',
+						value: 'PRIVATE',
+						description: 'Trigger only on one-to-one messages',
+					},
+					{
+						name: 'Group',
+						value: 'GROUP',
+						description: 'Trigger only on group messages. Zalo delivers a group message only when the bot is @mentioned or replied to.',
+					},
+				],
+				default: 'all',
+			},
+			{
+				displayName:
+					'To reply in the same conversation (including a group), map Chat ID from <b>message → chat → ID</b>. <b>message → from → ID</b> is the sender, so replying to it always goes to their private inbox.',
+				name: 'replyNotice',
+				type: 'notice',
+				default: '',
+			},
 		],
 		triggerPanel: {
 			header: 'Pull in events from Zalo Bot',
@@ -197,6 +228,16 @@ export class ZaloBotTrigger implements INodeType {
 		if (event !== 'anyMessage') {
 			const eventName = data.event_name as string;
 			if (eventName !== event) {
+				return { noWebhookResponse: true };
+			}
+		}
+
+		// Filter by chat type. Read with a fallback so workflows saved before
+		// this parameter existed keep passing everything through.
+		const chatType = this.getNodeParameter('chatType', 'all') as string;
+		if (chatType !== 'all') {
+			const chat = (data.message as IDataObject)?.chat as IDataObject | undefined;
+			if (chat?.chat_type !== chatType) {
 				return { noWebhookResponse: true };
 			}
 		}

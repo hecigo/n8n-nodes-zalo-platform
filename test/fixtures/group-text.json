@@ -1,0 +1,21 @@
+{
+	"ok": true,
+	"result": {
+		"message": {
+			"chat": {
+				"id": "zgr-7e3d9b1a5c2f80e4d6a1",
+				"chat_type": "GROUP"
+			},
+			"text": "@Bot MyShop xin chao",
+			"message_id": "a41c7e9d03b6f25e8d17",
+			"date": 1791900000000,
+			"from": {
+				"id": "5c1e9a7d3b2f48a6e0d4",
+				"is_bot": false,
+				"display_name": "Nguyen Van A"
+			}
+		},
+		"event_name": "message.text.received"
+	},
+	"error_code": 0
+}

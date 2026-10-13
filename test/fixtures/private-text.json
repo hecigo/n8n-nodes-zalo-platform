@@ -1,0 +1,21 @@
+{
+	"ok": true,
+	"result": {
+		"message": {
+			"chat": {
+				"id": "5c1e9a7d3b2f48a6e0d4",
+				"chat_type": "PRIVATE"
+			},
+			"text": "Xin chao",
+			"message_id": "d92b04f6e1a7c3580b4e",
+			"date": 1791900030000,
+			"from": {
+				"id": "5c1e9a7d3b2f48a6e0d4",
+				"is_bot": false,
+				"display_name": "Nguyen Van A"
+			}
+		},
+		"event_name": "message.text.received"
+	},
+	"error_code": 0
+}
