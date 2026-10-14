@@ -6,7 +6,8 @@ on:
       - 'v*'
 
 permissions:
-  contents: read
+  # write: create the GitHub Release after publishing
+  contents: write
   id-token: write
 
 jobs:
@@ -38,3 +39,22 @@ jobs:
       # automatically when publishing from a trusted publisher.
       - name: Publish to npm
         run: npm publish --access public
+
+      # The release notes are this version's CHANGELOG section, so the Releases
+      # page and npm never disagree. Relative links are made absolute because
+      # they do not resolve on the Releases page.
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+          REPO: ${{ github.repository }}
+        run: |
+          VERSION="${TAG#v}"
+          awk -v v="$VERSION" '$0=="## "v{f=1;next} /^## /{f=0} f' CHANGELOG.md \
+            | sed -e "s#](docs/#](https://github.com/$REPO/blob/$TAG/docs/#g" -e '/./,$!d' > notes.md
+          if [ ! -s notes.md ]; then
+            echo "::error::CHANGELOG.md has no '## $VERSION' section. Package is published; add the section and create the release by hand."
+            exit 1
+          fi
+          printf '\n---\n\nnpm: [n8n-nodes-zalo-platform@%s](https://www.npmjs.com/package/n8n-nodes-zalo-platform/v/%s)\n' "$VERSION" "$VERSION" >> notes.md
+          gh release create "$TAG" --verify-tag --title "$TAG" --notes-file notes.md
