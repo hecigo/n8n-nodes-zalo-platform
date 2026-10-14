@@ -89,3 +89,59 @@ describe('ZaloBot: errors', () => {
 		assert.deepEqual(out[1].json, { ok: true, result: { message_id: 'm' } });
 	});
 });
+
+describe('ZaloBot: v1 / v2 parameter layout', () => {
+	const { NodeHelpers } = require('n8n-workflow');
+	const { ZaloBot } = require('./helpers');
+	const description = new ZaloBot().description;
+
+	// Resolve parameters the way the n8n editor and executor do, then collect issues.
+	function resolve(typeVersion, values) {
+		const node = { id: '1', name: 'Zalo Bot', type: 'zaloBot', typeVersion, position: [0, 0], parameters: values };
+		node.parameters = NodeHelpers.getNodeParameters(description.properties, values, true, false, node, description);
+		return { params: node.parameters, issues: NodeHelpers.getNodeParametersIssues(description.properties, node, description) };
+	}
+
+	it('new nodes default to v2 with resources', () => {
+		assert.deepEqual(description.version, [1, 2]);
+		assert.equal(description.defaultVersion, 2);
+		assert.deepEqual(resolve(2, {}).params.resource, 'message');
+	});
+
+	it('v2 resources cover the same 9 operations as v1, each exactly once', () => {
+		const ops = (version) =>
+			description.properties
+				.filter((p) => p.name === 'operation' && p.displayOptions.show['@version'][0] === version)
+				.flatMap((p) => p.options.map((o) => o.value));
+		assert.equal(ops(1).length, 9);
+		assert.deepEqual([...ops(2)].sort(), [...ops(1)].sort());
+	});
+
+	const saved = {
+		setWebhook: { webhookUrl: 'https://h/w', secretToken: 'secret123' },
+		sendMessage: { chatId: '={{ $json.message.chat.id }}', text: 'hi' },
+		sendPhoto: { chatId: 'c', photo: 'https://x/y.jpg', caption: 'cap' },
+		sendSticker: { chatId: 'c', stickerId: 's1' },
+		sendChatAction: { chatId: 'c', action: 'typing' },
+		getUpdates: { timeout: 5 },
+		getMe: {},
+		deleteWebhook: {},
+		getWebhookInfo: {},
+	};
+	const resourceOf = { setWebhook: 'webhook', deleteWebhook: 'webhook', getWebhookInfo: 'webhook', getMe: 'bot', getUpdates: 'bot' };
+
+	for (const [operation, fields] of Object.entries(saved)) {
+		it(`a saved v1 ${operation} node keeps every value and has no issues`, () => {
+			const { params, issues } = resolve(1, { operation, ...fields });
+			assert.deepEqual(params, { operation, ...fields });
+			assert.equal(issues, null);
+		});
+
+		it(`v2 ${operation} shows the same fields`, () => {
+			const resource = resourceOf[operation] ?? 'message';
+			const { params, issues } = resolve(2, { resource, operation, ...fields });
+			assert.deepEqual(params, { resource, operation, ...fields });
+			assert.equal(issues, null);
+		});
+	}
+});

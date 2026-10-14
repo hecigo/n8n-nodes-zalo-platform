@@ -5,8 +5,10 @@ trên n8n, họ thấy ID của tin nhắn riêng và ID của tin nhắn nhóm 
 họ đang so là `from.id` (người gửi), không phải `chat.id` (cuộc trò chuyện). Khi đã tách được
 hai ID này, mọi thứ còn lại trong hướng dẫn chỉ là cấu hình.
 
-Hướng dẫn này dùng `n8n-nodes-zalo-platform` 2.1.0. Phần lớn chạy được trên 2.0.x. Riêng bộ
-lọc **Chat Type** thì cần 2.1.0.
+Hướng dẫn này dùng `n8n-nodes-zalo-platform` 2.2.0. Phần lớn chạy được trên 2.0.x. Riêng bộ
+lọc **Chat Type** thì cần từ 2.1.0. Từ 2.2.0, node **Zalo Bot** mới thêm vào canvas có thêm ô
+**Resource** (Bot, Message, Webhook). Node đã lưu trước đó vẫn giữ danh sách Operation cũ và
+chạy như trước.
 
 ## Hai ID trong mỗi tin nhắn
 
@@ -67,7 +69,7 @@ nhưng không nên dùng làm điều kiện rẽ nhánh trong workflow. Muốn 
    gọi `getMe`. Nếu bị 401 thì token sai hoặc đã bị đổi.
 3. **Trigger.** Thêm **Zalo Bot Trigger**, chọn Event là `Text Message`. Bạn không cần tự đặt
    webhook: khi workflow được bật, node tự đăng ký webhook với Zalo và tự kiểm secret token.
-4. **Trả lời.** Thêm node **Zalo Bot**, chọn Operation là `Send Message`:
+4. **Trả lời.** Thêm node **Zalo Bot**, chọn Resource là `Message` và Operation là `Send Message`:
    - Chat ID: `{{ $json.message.chat.id }}`
    - Text: `Đã nhận: {{ $json.message.text }}`
 5. Bật workflow rồi nhắn cho bot.
@@ -151,8 +153,8 @@ Một tin nhắn tối đa 2000 ký tự. Câu trả lời của AI thường d�
 giới hạn độ dài ngay trong system prompt, hoặc tách câu trả lời thành nhiều tin và gửi lần
 lượt.
 
-Muốn hiện trạng thái "đang soạn tin" trong lúc AI xử lý, thêm node **Zalo Bot** với Operation
-`Send Chat Action` (`typing`) ngay sau Trigger, Chat ID vẫn là `chat.id`. Chúng tôi chưa kiểm
+Muốn hiện trạng thái "đang soạn tin" trong lúc AI xử lý, thêm node **Zalo Bot** với Resource
+`Message`, Operation `Send Chat Action` (`typing`) ngay sau Trigger, Chat ID vẫn là `chat.id`. Chúng tôi chưa kiểm
 hiệu ứng này trong nhóm.
 
 ## Giới hạn đã biết

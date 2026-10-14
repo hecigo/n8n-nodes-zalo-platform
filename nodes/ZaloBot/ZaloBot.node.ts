@@ -20,7 +20,10 @@ export class ZaloBot implements INodeType {
 		name: 'zaloBot',
 		icon: { light: 'file:zalobot.svg', dark: 'file:zalobot.dark.svg' },
 		group: ['output'],
-		version: 1,
+		// v2 groups the operations under resources. Operation values and every other
+		// parameter are unchanged, so v1 workflows run as before.
+		version: [1, 2],
+		defaultVersion: 2,
 		usableAsTool: true,
 		subtitle: '={{$parameter["operation"]}}',
 		description: 'Send messages, photos, stickers, chat actions and manage webhooks. Compatible with official Zalo Bot Platform.',
@@ -36,12 +39,17 @@ export class ZaloBot implements INodeType {
 			},
 		],
 		properties: [
-			// ------ Operation ------
+			// ------ Operation (v1: flat list, kept so saved workflows keep working) ------
 			{
 				displayName: 'Operation',
 				name: 'operation',
 				type: 'options',
 				noDataExpression: true,
+				displayOptions: {
+					show: {
+						'@version': [1],
+					},
+				},
 				options: [
 					{
 						name: 'Delete Webhook',
@@ -99,6 +107,133 @@ export class ZaloBot implements INodeType {
 					},
 				],
 				default: 'sendMessage',
+			},
+
+			// ------ Resource (v2) ------
+			{
+				displayName: 'Resource',
+				name: 'resource',
+				type: 'options',
+				noDataExpression: true,
+				displayOptions: {
+					show: {
+						'@version': [2],
+					},
+				},
+				options: [
+					{
+						name: 'Bot',
+						value: 'bot',
+					},
+					{
+						name: 'Message',
+						value: 'message',
+					},
+					{
+						name: 'Webhook',
+						value: 'webhook',
+					},
+				],
+				default: 'message',
+			},
+			{
+				displayName: 'Operation',
+				name: 'operation',
+				type: 'options',
+				noDataExpression: true,
+				displayOptions: {
+					show: {
+						'@version': [2],
+						resource: ['bot'],
+					},
+				},
+				options: [
+					{
+						name: 'Get Info',
+						value: 'getMe',
+						description: 'Get information about the bot',
+						action: 'Get bot info',
+					},
+					{
+						name: 'Get Updates',
+						value: 'getUpdates',
+						description: 'Fetch incoming messages via long polling',
+						action: 'Get updates',
+					},
+				],
+				default: 'getMe',
+			},
+			{
+				displayName: 'Operation',
+				name: 'operation',
+				type: 'options',
+				noDataExpression: true,
+				displayOptions: {
+					show: {
+						'@version': [2],
+						resource: ['message'],
+					},
+				},
+				options: [
+					{
+						name: 'Send Chat Action',
+						value: 'sendChatAction',
+						description: 'Display a typing or upload indicator in a conversation',
+						action: 'Send a chat action',
+					},
+					{
+						name: 'Send Message',
+						value: 'sendMessage',
+						description: 'Send a text message to a user or group',
+						action: 'Send a message',
+					},
+					{
+						name: 'Send Photo',
+						value: 'sendPhoto',
+						description: 'Send a photo to a user or group',
+						action: 'Send a photo',
+					},
+					{
+						name: 'Send Sticker',
+						value: 'sendSticker',
+						description: 'Send a sticker to a user or group',
+						action: 'Send a sticker',
+					},
+				],
+				default: 'sendMessage',
+			},
+			{
+				displayName: 'Operation',
+				name: 'operation',
+				type: 'options',
+				noDataExpression: true,
+				displayOptions: {
+					show: {
+						'@version': [2],
+						resource: ['webhook'],
+					},
+				},
+				options: [
+					{
+						name: 'Delete',
+						value: 'deleteWebhook',
+						description: 'Remove the current webhook configuration',
+						action: 'Delete webhook',
+					},
+					{
+						name: 'Get Info',
+						value: 'getWebhookInfo',
+						description: 'Get information about the current webhook',
+						action: 'Get webhook info',
+					},
+					{
+						name: 'Set',
+						value: 'setWebhook',
+						description: 'Configure a webhook URL to receive updates',
+						action: 'Set webhook',
+					},
+				],
+				default: 'setWebhook',
 			},
 
 			// ------ Send Message ------

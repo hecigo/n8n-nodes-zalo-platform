@@ -1,5 +1,20 @@
 # Changelog
 
+## 2.2.0
+
+Fixes from n8n's review of the 2.1.0 submission. Existing workflows behave exactly as before.
+
+- **Zalo Bot** now has two versions. New nodes use v2, which groups the nine operations
+  under a **Resource**: Bot (Get Info, Get Updates), Message (Send Chat Action, Send
+  Message, Send Photo, Send Sticker) and Webhook (Delete, Get Info, Set). Nodes saved on v1
+  keep the flat operation list. Operation values and all other parameters are identical in
+  both versions, and tests resolve every v1 operation through n8n's own parameter logic to
+  confirm no saved value is dropped.
+- README is English only. The Vietnamese UI labels from Zalo are given in English, and the
+  group chat guide is linked as "Group Chat Guide (Vietnamese)".
+- `@n8n/eslint-plugin-community-nodes` raised to the version n8n's scanner runs, so
+  `npm run lint` reports the same errors as the review.
+
 ## 2.1.0
 
 Group chats. Existing workflows behave exactly as before.

@@ -7,7 +7,9 @@ import n8nNodesPlugin from 'eslint-plugin-n8n-nodes-base';
 import parser from '@typescript-eslint/parser';
 
 export default defineConfig(
-	{ ignores: ['dist/**', 'node_modules/**'] },
+	// test/ runs on the developer machine with node:test and is not in the npm
+	// package, so the n8n Cloud runtime restrictions do not apply to it.
+	{ ignores: ['dist/**', 'node_modules/**', 'test/**'] },
 	n8nCommunityNodesPlugin.configs.recommended,
 	{ rules: { 'no-console': 'error' } },
 	{ plugins: { 'n8n-nodes-base': n8nNodesPlugin } },

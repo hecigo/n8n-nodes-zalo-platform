@@ -8,7 +8,7 @@ Community node for [Zalo Bot Platform](https://bot.zaloplatforms.com) on n8n. Au
 
 Built by [hecigo](https://hecigo.com/go/hm-np-readme?i=zalo) — Middleware & Integration Lab.
 
-**Guides:** [Running a Zalo bot on n8n: what breaks in production](https://hecigo.com/blog/n8n-zalo-bot-node-what-breaks-in-production/?utm_source=npm&utm_medium=referral&utm_content=readme-zalo) (English) · [Detailed Guide](https://hecigo.com/blog/toi-uu-tu-dong-hoa-zalo-bot-voi-n8n-huong-dan-chi-tiet-tu-hecigo?utm_source=npm&utm_medium=referral&utm_content=readme-zalo) (Vietnamese) · [Chat riêng và trong nhóm](https://github.com/hecigo/n8n-nodes-zalo-platform/blob/main/docs/huong-dan-chat.md) (Vietnamese)
+**Guides:** [Running a Zalo bot on n8n: what breaks in production](https://hecigo.com/blog/n8n-zalo-bot-node-what-breaks-in-production/?utm_source=npm&utm_medium=referral&utm_content=readme-zalo) (English) · [Detailed Guide](https://hecigo.com/blog/toi-uu-tu-dong-hoa-zalo-bot-voi-n8n-huong-dan-chi-tiet-tu-hecigo?utm_source=npm&utm_medium=referral&utm_content=readme-zalo) (Vietnamese) · [Group Chat Guide](https://github.com/hecigo/n8n-nodes-zalo-platform/blob/main/docs/huong-dan-chat.md) (Vietnamese)
 
 ## Nodes
 
@@ -73,16 +73,16 @@ Zalo posts `{ "ok": true, "result": { ... }, "error_code": 0 }`. The trigger unw
 #### Using the bot in a group
 
 Full walkthrough, including AI Agent memory per chat and per sender (Vietnamese):
-[Chat với Zalo Bot trên n8n: tin nhắn riêng và trong nhóm](https://github.com/hecigo/n8n-nodes-zalo-platform/blob/main/docs/huong-dan-chat.md).
+[Group Chat Guide](https://github.com/hecigo/n8n-nodes-zalo-platform/blob/main/docs/huong-dan-chat.md).
 
-Zalo lists group chats as **in internal testing** ("trong giai đoạn thử nghiệm nội bộ"),
+Zalo lists group chats as **in internal testing**,
 so the invite option may not be available for every bot or account yet. Official guide:
 [Zalo Bot interaction with group chats](https://bot.zapps.me/docs/build-bot-interaction-with-group/).
 
 1. **Add the bot through its invite link, not through "Add member".** Open the
-   **Zalo Bot Creator** mini app, pick the bot, and in **"Mời Bot vào nhóm"** share or
-   copy the link into the group. A **group admin** (Zalo's guide says the group owner,
-   trưởng nhóm) taps the link and confirms **"Thêm Bot vào Nhóm"**. A regular member
+   **Zalo Bot Creator** mini app, pick the bot, and in the **Invite bot to group** section share or
+   copy the link into the group. A **group admin** (Zalo's guide says the group owner)
+   taps the link and confirms **Add Bot to Group**. A regular member
    cannot add the bot. The bot then posts a joined message in the group.
 2. **@mention the bot, or reply to one of its messages.** Zalo sends a group message to
    the webhook only in those two cases, so ordinary chatter in the group never reaches n8n.
@@ -116,6 +116,16 @@ send to does not start with `zgr-`, the reply is going to a private inbox.
 ### Zalo Bot (Action)
 
 9 operations, all using `POST` requests to `https://bot-api.zaloplatforms.com/bot{TOKEN}/{method}`.
+
+Since 2.2.0 the node has two versions. New nodes use **v2**, which groups the operations
+under a **Resource**. Nodes saved earlier stay on **v1** with the flat operation list and
+keep working unchanged. Operation values and parameters are the same in both versions.
+
+| Resource (v2) | Operations |
+|---------------|------------|
+| Bot | Get Info (`getMe`), Get Updates (`getUpdates`) |
+| Message | Send Chat Action, Send Message, Send Photo, Send Sticker |
+| Webhook | Delete (`deleteWebhook`), Get Info (`getWebhookInfo`), Set (`setWebhook`) |
 
 #### Send Message
 
@@ -255,7 +265,7 @@ Schedule Trigger (every 30s)
 |---------|-------|-----|
 | Trigger receives nothing | Cloudflare blocks Java UA | Create both Cloudflare rules |
 | Bot replies in private inbox, not the group | Chat ID mapped to `message.from.id` | Use `{{ $json.message.chat.id }}` |
-| Cannot add the bot to a group | Group feature still in Zalo's internal testing, or not added by a group admin via the invite link | Use the link from Zalo Bot Creator → "Mời Bot vào nhóm", tapped by a group admin. If the option is missing, the feature is not open to that bot yet |
+| Cannot add the bot to a group | Group feature still in Zalo's internal testing, or not added by a group admin via the invite link | Use the link from Zalo Bot Creator (Invite bot to group section), tapped by a group admin. If the option is missing, the feature is not open to that bot yet |
 | Group messages never trigger | Bot not @mentioned or replied to | Tag the bot, or reply to one of its messages |
 | 401 on credential test | Token expired/wrong | Create new bot |
 | Test mode spins forever | Workflow still active | Deactivate before testing |
